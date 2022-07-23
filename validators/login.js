@@ -8,7 +8,7 @@ const validateEmail = (email) => {
   };
   const validatePassword = (password) => {
     return String(password)
-    .match(/^[a-zA-Z0-9]+$/);
+    .match("^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$");
 }
 
 function validateLogin(data) {
@@ -16,9 +16,46 @@ function validateLogin(data) {
     const password  = validatePassword(data.password);
         const validated = {
             email:email,
-            password:String(password[0])
+            password:String(password)
         }
     return validated;
 }
+//console.log('running test!');
+//console.log(validateLogin({email:'tarek42223@gmail.com',password:'123456789'}));
 
+
+/*
+const Joi = require('joi');
+
+const validateLogin = Joi.object({
+    email: Joi.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]+@[a-zA-Z0-9]+.[a-zA-Z0-9]+$'))
+        .email()
+        .alphanum()
+        .min(3)
+        .max(35)
+        .required(),
+
+    password: Joi.string()
+        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+
+    repeat_password: Joi.ref('password'),
+
+
+    birth_year: Joi.number()
+        .integer()
+        .min(1900)
+        .max(2013),
+
+    email: Joi.string()
+        .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+})
+.with('email', 'password');
+
+const x = validateLogin.validate({
+    email: 'tarek42223@gmail.com',
+    password: '123456789',
+})
+
+*/
 module.exports = validateLogin;

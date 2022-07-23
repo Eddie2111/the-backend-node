@@ -31,9 +31,26 @@ const userSchema = new mongoose.Schema({
         length:    [3, 150],
         trim:      true,
     }
-});
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+  },
+   { collection: 'users' }
+);
+
+const Userone = new mongoose.Schema({
+    name: {
+        type:      String,
+    },
+    email: {
+        type:      String
+    },
+    password: {
+        type:      String,
+    }
+  },
+   { collection: 'users' }
+);
+const userOne = mongoose.model('Userone', Userone);
+const User    = mongoose.model('User', userSchema);
+module.exports = {User,userOne};
 
 /////////////////
 /** for password validation

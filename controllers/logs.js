@@ -6,7 +6,7 @@ const data = {
     name: req.body.name,
     description: req.body.description,
 }
-logs.create(data)
+Logs.create(data)
     .then(
         (data)=>{
             res.send(data);
@@ -18,3 +18,4 @@ logs.create(data)
         }
     )
 }
+module.exports = LogStack;

@@ -3,7 +3,8 @@ const app     = express();
 const router  = express.Router();
 const session = require('express-session');
 const validateSignUp = require('../validators/signup');
-const signupHandle = require('../controllers/signup');
+//const signupHandle = require('../controllers/signup'); → check file to know more
+// const model = require('../middleware/model'); → no use, inefficient, probably not possible
 app.use(express.urlencoded({
     extended: true
 }));
@@ -22,22 +23,40 @@ router
     })
     .post((req,res)=>{
        console.log("from signup route->:");
-       console.log(req.body);
+       //console.log(req.body);
         const x = validateSignUp(req.body);
-        if (x){
-        res.send(signupHandle(x));
+        const {User} = require('../model/signup');
+        const cryptGenerate = require('../middleware/encrypt');
+        const password = cryptGenerate(x.password);
+        const user = new User({
+            name: x.name,
+            email: x.email,
+            password: password
+        });
+        //console.log(user);
+        const success= {
+            status:200,
+            message: "signup ok!",
         }
-        else{
-            const error = {
-                status: 404,
-                message: "Invalid data",
-                summary: "Signup failed",
-                version: "10.10.10",
-                problem: "email or password is incorrect"
+        const fail = {
+            status: 404,
+            message: "sign up failed",
+        }
+
+        user.save()
+        .then(
+            (data)=>{
+                session.user = req.body.name,
+                console.log('ok!'),
+                res.send(success);
             }
-            res.send(error);
-        }
-        session.user = req.body.name;
+        )
+        .catch((err)=>{
+            console.log(fail),
+                res.send(fail);
+            }
+        )
+      
     }
     );
 module.exports = router;

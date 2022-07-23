@@ -10,7 +10,9 @@ const userSchema = new mongoose.Schema({
         required:  true,
         lowercase: true,
         loggedAt: Date.now(),
-    }    
-});
+    }   
+ }
+ , { collection: 'logs' }
+);
 const Logs = mongoose.model('Logs', userSchema);
 module.exports = Logs;
