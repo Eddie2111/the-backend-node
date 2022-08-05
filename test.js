@@ -56,8 +56,18 @@ function response(input){
     //return message;
 }
 console.log(response('notFound'));
+function jwto(token){
+const jwt = require('jsonwebtoken');
+const tokenVerify = jwt.verify(token, process.env.SECRET);
+const modDateNow = parseInt(Date.now().toString().slice(0,tokenVerify.exp.toString().length)); //extremely complex
+console.log (tokenVerify.exp,modDateNow );
+
+if(tokenVerify.exp > modDateNow){
+     console.log("data");
+ }
+ else{
+     console.log("token expired, get a new token");
+ }
     
-
-
-
-
+}
+jwto("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhcmVrQDF0NGVydGUyMy5jb20iLCJwYXNzd29yZCI6InBhcmtvIiwiaWF0IjoxNjU5NTk0NjY1LCJleHAiOjE2NTk1OTgyNjV9.jln3oUaswViPcmHu2rBuD7SY_Cee0ZYvd2Yr3flzrFE");

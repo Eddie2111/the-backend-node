@@ -12,7 +12,8 @@ const validateEmail = (email) => {
     }
   };
   const validatePassword = (password) => {
-    return String(password);
+    return String(password).substring(0,18);;
+    
 }
 
 function validateSignUp(data) {
@@ -30,14 +31,14 @@ function validateSignUp(data) {
 const Joi = require('joi');
 
 const schema = Joi.object({
-    fullname: Joi.string()
+    name: Joi.string()
         .min(3)
         .max(30)
-        .required(),
+        .pattern(new RegExp('^[a-z A-Z]{3,18}$')),
 
     password: Joi.string()
-        .pattern(new RegExp('^[a-z A-Z0-9]{3,30}$')),
-
+        .pattern(new RegExp('^.{4,30}$')),
+//'^[a-z A-Z0-9]{3,30}$'
     repeat_password: Joi.ref('password'),
 
     access_token: [
@@ -68,8 +69,8 @@ const schema = Joi.object({
 // -> { value: {}, error: '"username" is required' }
 
 // Also -
-//const value = schema.validateAsync({ fullname: 'ontora biswas', birth_year: 1994 });
+const value = schema.validate({ name: 'ontora biswas', birth_year: 1994, password:'AA!@12bbb' });
+//console.log(value)
 
 
-
-module.exports = validateSignUp;
+module.exports = {validateSignUp, schema};

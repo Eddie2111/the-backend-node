@@ -6,26 +6,21 @@ const validateLogin = require('../validators/login');
 const bcrypt  = require('bcrypt');
 
 const {
-    success, fail, wrongPassword, passwordMatch, noUser
+    success, fail, loginwrongPassword, loginpasswordMatch, loginnoUser, netError,
         } = require("../middleware/messages");
 app.use(express.urlencoded({
     extended: true
 }));
 app.use(express.json());
 
-const data = {
-    title: "welcome",
-    message: "data came from node backend but changed",
-    version: "10.10.10"
-};
 router
     .route('/')
     .get((req,res)=>{
         res.send("/login");
     })
     .post((req,res)=>{
-       console.log("from login route->:");
-       console.log(req.body);
+       //console.log("from login route->:");
+       //console.log(req.body);
        const {userOne} = require('../model/signup');
         const x = {
             email: req.body.email,
@@ -34,7 +29,7 @@ router
         //console.log(x.password);
         //console.log('this is x');
 
-try{
+      try{
         userOne.findOne({
             email:x.email
         }).then(
@@ -46,10 +41,10 @@ try{
                                 if(result===false){
                                     const message = {
                                         status:400,
-                                        message:"user not found",
+                                        message:"wrong password",
                                         route:"/login"
                                     }
-                                    res.send(message)
+                                    res.send(loginwrongPassword);
                                 }
                                 else{
                                     const message = {
@@ -58,7 +53,7 @@ try{
                                         route:"/success"
                                     }
                                     session.user = req.body.name;
-                                    res.send(message)
+                                    res.send(loginpasswordMatch)
                                 }
                             }
                         )
@@ -70,20 +65,19 @@ try{
                         message:"user not found",
                         route:"/login"
                     }
-                    res.send(message);
+                    res.send(loginnoUser);
                 }
                 }
                 )
             }
-            catch {
-                const message = {
-                    status:500,
-                    message:"database error/network error",
-                    route:"/login"
-                }
-                res.send(message)
+      catch {
+
+                res.send(netError)
             }
-        function response(input){
+      
+
+            // rough code, not needed anymore, storing it up for other purpose
+            function response(input){
             const message = {}
             if(input==='notFound'){
                 const message = {
