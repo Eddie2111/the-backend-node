@@ -11,6 +11,7 @@ const userSchema = new mongoose.Schema({
                 return /^[a-z A-Z]+$/.test(v);
             }
         }
+        
     },
     email: {
         type:      String,
