@@ -28,46 +28,35 @@ userOne.findOne({
         }
         )
         */
-        const noUser = {
-            status: "status is fine"
-        }
-        
-function response(input){
-    
-    if(input==='notFound'){
-        const message={
-            ...noUser,
-            route:"/login"
-        }
-        
-    }
-    if(input==='notMatch'){
-        const message={
-            ...noUser,
-            route:"/login"
-        }
-    }
-    if(input==='success'){
-        const message={
-            ...noUser,
-            route:"/login"
-        }
-    }
-    //return message;
-}
-console.log(response('notFound'));
-function jwto(token){
-const jwt = require('jsonwebtoken');
-const tokenVerify = jwt.verify(token, process.env.SECRET);
-const modDateNow = parseInt(Date.now().toString().slice(0,tokenVerify.exp.toString().length)); //extremely complex
-console.log (tokenVerify.exp,modDateNow );
 
-if(tokenVerify.exp > modDateNow){
-     console.log("data");
- }
- else{
-     console.log("token expired, get a new token");
- }
-    
+
+function jwti(){ //function written to verify tokens //successful!
+    const jwt = require('jsonwebtoken');
+    try{
+        const token = {
+            email: "test email",
+            password:"test password"
+        }
+        const tokenGenerate = jwt.sign({exp: 1000,data: token}, process.env.SECRET);
+        
+        return tokenGenerate
+    }
+    catch(err){
+        console.log("generation failed",err.message);
+    }
 }
-jwto("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRhcmVrQDF0NGVydGUyMy5jb20iLCJwYXNzd29yZCI6InBhcmtvIiwiaWF0IjoxNjU5NTk0NjY1LCJleHAiOjE2NTk1OTgyNjV9.jln3oUaswViPcmHu2rBuD7SY_Cee0ZYvd2Yr3flzrFE");
+function jwto(token){
+    const jwt = require('jsonwebtoken');
+    try{
+        const tokenVerify = jwt.verify(token, process.env.SECRET);
+        const modDateNow = parseInt(Date.now().toString().slice(0,tokenVerify.exp.toString().length)); //extremely complex
+        console.log (tokenVerify.exp,modDateNow );
+        console.log("data");
+    }
+    catch(err){
+        console.log("verification failed",err.message);
+    }
+
+}
+
+jwto(jwti());

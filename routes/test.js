@@ -48,7 +48,7 @@ router
        //console.log (tokenVerify.exp,modDateNow );
        try{
        if(tokenVerify.exp > modDateNow){
-            res.send(data);
+            res.status(200).json(data).cookie();
         }
         else{
             res.send("token expired, get a new token");

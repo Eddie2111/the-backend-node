@@ -3,7 +3,7 @@ const app     = express();
 const router  = express.Router();
 const session = require('express-session');
 const { schema } = require('../validators/signup');
-const { signupSuccess,signupFail,mailExists, netError } = require('../middleware/messages');
+const { signupSuccess,signupFail,mailExists, netError, noinput, improperInput } = require('../middleware/messages');
 //const signupHandle = require('../controllers/signup'); → check file to know more
 // const model = require('../middleware/model'); → no use, inefficient, probably not possible
 app.use(express.urlencoded({
@@ -43,30 +43,24 @@ router
         //console.log("this is user")
         //console.log(user);
         
-
-        user.save()
-        .then(
-            (data)=>{
-                session.user = req.body.name,
-                console.log(success),
-                res.send(signupSuccess);
-            }
-        )
-        .catch((err)=>{
-            try{
-            if (err.keyPattern.email>0){
+        user.save().then(()=>{
+            console.log("from then")
+            res.send(signupSuccess);
+        }).catch((err)=>{
+            const msg = String(err.message)
+            if(msg.includes("duplicate key")){
+                console.log("from duplicate key")
                 res.send(mailExists);
             }
-            if (err.keyPattern.password===0){
+            if(msg.includes("validation")){
+                console.log("from validation")
+                res.send(improperInput)
+            }
+            if(!msg){
+                console.log("from unknown")
                 res.send(signupFail);
             }
-            }
-            catch{
-                res.send(netError);
-            }
-            }
-        )
-      
-    }
-    );
+        })
+    });
+    
 module.exports = router;

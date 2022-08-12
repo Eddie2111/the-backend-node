@@ -18,13 +18,19 @@ const noEmail = {
     status: 400,
     message: "no email found"
 }
+const improperInput = {
+    status: 400,
+    message:"improper email or password",
+    route: "/signin"
+}
 const passwordMatch = {
     status: 200,
     message: "password match"
 }
 const mailExists = {
     status: 400,
-    message: "That Email is already in use"
+    message: "That Email is already in use",
+    route: "/signup"
 }
 const signupSuccess= {
     status:200,
@@ -55,9 +61,19 @@ const loginnoUser={
     message: "no user found",
     route: "/login"
 }
+const noinput = {
+    status: 400,
+    message: "No email or Password",
+    route: "/login"
+}
+const errorRoute = {
+    status:404,
+    message: "route exists but will not operate. Are you authorized?",
+    route: "/error"
+}
 module.exports = {
-        success, fail, wrongPassword, 
-        noUser, noEmail, passwordMatch, 
+        success, fail, wrongPassword, noinput, errorRoute, 
+        noUser, noEmail, passwordMatch, improperInput,
         mailExists, signupSuccess, signupFail,
-        netError, loginwrongPassword, loginpasswordMatch
+        netError, loginwrongPassword, loginpasswordMatch, loginnoUser
     };

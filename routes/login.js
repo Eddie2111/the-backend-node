@@ -4,9 +4,9 @@ const router  = express.Router();
 const session = require('express-session');
 const validateLogin = require('../validators/login');
 const bcrypt  = require('bcrypt');
-
+const attempt = 0;
 const {
-    success, fail, loginwrongPassword, loginpasswordMatch, loginnoUser, netError,
+    loginwrongPassword, loginpasswordMatch, loginnoUser, netError, noinput
         } = require("../middleware/messages");
 app.use(express.urlencoded({
     extended: true
@@ -22,6 +22,10 @@ router
        //console.log("from login route->:");
        //console.log(req.body);
        const {userOne} = require('../model/signup');
+       if (!req.body.email){
+        res.send(noinput);
+       }
+       else{
         const x = {
             email: req.body.email,
             password: req.body.password
@@ -75,7 +79,7 @@ router
                 res.send(netError)
             }
       
-
+        }
             // rough code, not needed anymore, storing it up for other purpose
             function response(input){
             const message = {}
@@ -126,6 +130,8 @@ router
         );
         */
         //session.user = req.body.name;
-    }
+
+}
+
     );
 module.exports = router;
